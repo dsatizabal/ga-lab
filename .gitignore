@@ -1,0 +1,13 @@
+# Local .tfvars files
+*.tfvars
+!*.tfvars.example
+!regions.auto.tfvars.json
+
+# Terraform files
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate.*
+.terraformrc
+terraform.rc

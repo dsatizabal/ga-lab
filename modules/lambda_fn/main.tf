@@ -12,8 +12,8 @@ data "archive_file" "zip" {
 }
 
 resource "aws_lambda_function" "this" {
-  function_name = var.function_name
-  filename      = data.archive_file.zip.output_path
+  function_name    = var.function_name
+  filename         = data.archive_file.zip.output_path
   source_code_hash = data.archive_file.zip.output_base64sha256
 
   runtime = "nodejs20.x"
@@ -44,5 +44,5 @@ resource "aws_iam_role_policy_attachment" "basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-output "lambda_arn"   { value = aws_lambda_function.this.arn }
-output "lambda_name"  { value = aws_lambda_function.this.function_name }
+output "lambda_arn" { value = aws_lambda_function.this.arn }
+output "lambda_name" { value = aws_lambda_function.this.function_name }

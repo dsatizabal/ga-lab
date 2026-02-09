@@ -1,0 +1,4 @@
+# AWS Credentials
+# Copy this file to terraform.tfvars and replace the placeholder values with your actual AWS credentials
+aws_access_key_id     = "KEY_ID_HERE"
+aws_secret_access_key = "ACCESS_KEY_HERE"
