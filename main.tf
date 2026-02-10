@@ -13,24 +13,24 @@ terraform {
 }
 
 provider "aws" {
-  alias                   = "use1"
-  region                  = "us-east-1"
-  access_key              = var.aws_access_key_id
-  secret_key              = var.aws_secret_access_key
+  alias      = "use1"
+  region     = "us-east-1"
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 provider "aws" {
-  alias                   = "euw1"
-  region                  = "eu-west-1"
-  access_key              = var.aws_access_key_id
-  secret_key              = var.aws_secret_access_key
+  alias      = "euw1"
+  region     = "eu-west-1"
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 provider "aws" {
-  alias                   = "apse1"
-  region                  = "ap-southeast-1"
-  access_key              = var.aws_access_key_id
-  secret_key              = var.aws_secret_access_key
+  alias      = "apse1"
+  region     = "ap-southeast-1"
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 module "regional_stack_use1" {
@@ -92,6 +92,29 @@ module "regional_stack_apse1" {
   alb_path          = lookup(var.regions["ap-southeast-1"], "alb_path", "/ga")
   use_default_vpc   = true
 }
+
+module "global_accelerator" {
+  count = contains(keys(var.regions), "us-east-1") ? 1 : 0
+
+  source = "./modules/ga"
+
+  providers = {
+    aws = aws.use1
+  }
+
+  ga_endpoints = {
+    "us-east-1" = {
+      alb_arn = module.regional_stack_use1[0].alb_arn
+    },
+    "eu-west-1" = {
+      alb_arn = module.regional_stack_euw1[0].alb_arn
+    },
+    "ap-southeast-1" = {
+      alb_arn = module.regional_stack_apse1[0].alb_arn
+    }
+  }
+}
+
 
 locals {
   regional_stacks = merge(
